@@ -1,7 +1,7 @@
-import { Container, Table } from 'react-bootstrap';
+import { Button, Container, Table } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function CourseTable(props) {
     return (
@@ -14,10 +14,11 @@ function CourseTable(props) {
                         <th className='col-1'>credits</th>
                         <th className='col-2'>maxStudents</th>
                         <th className='col-2'>enrolledStudents</th>
+                        {props.studyPlan ? <th></th> : <></>}
                     </tr>
                 </thead>
                 <tbody>
-                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code} />)}
+                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code} studyPlan={props.studyPlan} handleAddCourse={props.handleAddCourse}/>)}
                 </tbody>
             </Table>
         </Container>
@@ -34,6 +35,8 @@ function CourseRow(props) {
         <>
             <tr className={showInfo ? 'active-table-row' : undefined} onClick={() => { changeInfoState() }}>
                 <CourseData course={props.course} />
+                {props.studyPlan ? 
+                <td><Button variant='dark' size='sm' onClick={props.handleAddCourse}>ADD</Button></td> : <></>}
             </tr>
             {showInfo ? <CourseInfo courses={props.courses} course={props.course} /> : <></>}
         </>
@@ -53,7 +56,7 @@ function CourseData(props) {
 };
 
 
-function CourseInfo(props) {
+function CourseInfo(props) {    
     return (
         <>
             <tr className='table-row-info' align='center'>
@@ -66,7 +69,7 @@ function CourseInfo(props) {
                     : <></>
                 }
             </tr>
-            <tr className='table-row-info' align='center'>
+            <tr className='table-row-info' align='center'  key={(props.course.code + props.course.incompatibleCourses[0])}>
                 <th className='table-header-info'> incompatible courses </th>
                 {props.course.incompatibleCourses[0] ?
                     <>
@@ -83,10 +86,10 @@ function CourseInfo(props) {
             {props.course.incompatibleCourses.map((ic, idx) => {
                 const incompatibleCourse = props.courses.find((c) => c.code === ic)
                 if (idx === 0) {
-                    return (<></>)
+                    return (<></>);
                 } else {
                     return (
-                        <tr className='table-row-info' key={props.course.code + incompatibleCourse.code}>
+                        <tr className='table-row-info' key={(props.course.code + incompatibleCourse.code)}>
                             <td></td>
                             <td colSpan={1} align='center'>
                                 {incompatibleCourse.code}
@@ -95,7 +98,7 @@ function CourseInfo(props) {
                                 {incompatibleCourse.name}
                             </td>
                         </tr>
-                    )
+                    );
                 }
             })}
             <tr className='bordered-table-row'></tr>

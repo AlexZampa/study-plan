@@ -12,6 +12,10 @@ function StudyPlanApp(props) {
     const hideCoursesTable = () => setShowCourses(false);
     const showCoursesTable = () => setShowCourses(true);
 
+    const handleAddCourse = () => {
+        console.log('ADDDDD');
+    };
+
     return (
         <Container fluid>
             {props.studyPlan ?
@@ -50,7 +54,7 @@ function StudyPlanApp(props) {
             {showCourses ?
                 <>
                     <Row className='mt-5'>
-                        <CourseTable courses={props.courses} />
+                        <CourseTable courses={props.courses} studyPlan={true} handleAddCourse={handleAddCourse}/>
                     </Row>
 
                     <Row>
