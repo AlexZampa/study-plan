@@ -33,10 +33,10 @@ function CourseRow(props) {
 
     return (
         <>
-            <tr className={showInfo ? 'active-table-row' : undefined} onClick={() => { changeInfoState() }}>
+            <tr className={showInfo ? 'active-table-row' : undefined} onClick={changeInfoState}>
                 <CourseData course={props.course} />
                 {props.studyPlan ? 
-                <td><Button variant='dark' size='sm' onClick={props.handleAddCourse}>ADD</Button></td> : <></>}
+                <td><Button variant='dark' size='sm' onClick={(event) => {event.stopPropagation(); props.handleAddCourse(props.course);}}>ADD</Button></td> : <></>}
             </tr>
             {showInfo ? <CourseInfo courses={props.courses} course={props.course} /> : <></>}
         </>
@@ -69,7 +69,7 @@ function CourseInfo(props) {
                     : <></>
                 }
             </tr>
-            <tr className='table-row-info' align='center'  key={(props.course.code + props.course.incompatibleCourses[0])}>
+            <tr className='table-row-info' align='center' key={(`${props.course.code}${props.course.incompatibleCourses[0]}`)}>
                 <th className='table-header-info'> incompatible courses </th>
                 {props.course.incompatibleCourses[0] ?
                     <>
@@ -89,7 +89,7 @@ function CourseInfo(props) {
                     return (<></>);
                 } else {
                     return (
-                        <tr className='table-row-info' key={(props.course.code + incompatibleCourse.code)}>
+                        <tr className='table-row-info' key={`${props.course.code}${incompatibleCourse.code}`}>
                             <td></td>
                             <td colSpan={1} align='center'>
                                 {incompatibleCourse.code}

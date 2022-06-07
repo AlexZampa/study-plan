@@ -7,13 +7,12 @@ import { toast } from 'react-toastify';
 
 
 function StudyPlanApp(props) {
-    const [showCourses, setShowCourses] = useState(false);
+    const [studyPlanCourses, setStudyPlanCourses] = useState(props.studyPlan.courses);
 
-    const hideCoursesTable = () => setShowCourses(false);
-    const showCoursesTable = () => setShowCourses(true);
-
-    const handleAddCourse = () => {
-        console.log('ADDDDD');
+    const handleAddCourse = (course) => {
+        setStudyPlanCourses(oldStudyPlanCourses => {
+            return ([...oldStudyPlanCourses, course.code]);
+        });
     };
 
     return (
@@ -26,47 +25,34 @@ function StudyPlanApp(props) {
                 : <></>
             }
 
-            <Row align='left' className='studyplan-text'>
-                <h2>Courses:</h2>
-            </Row>
-
             <Row>
-                <StudyPlanTable courses={props.courses} studyPlan={props.studyPlan} />
+                <StudyPlanTable courses={props.courses} studyPlan={studyPlanCourses} type={props.studyPlan.type} />
             </Row>
 
-            <Row className='studyplan-text' >
-                <Col className='col-2' align='left'>
-                    {props.studyPlan ? 
-                    <>
-                        <ButtonEdit showCourses={showCourses} showCoursesTable={showCoursesTable} />
-                        <ButtonDelete showCourses={showCourses} />
-                    </>
-                    : <ButtonAdd showCourses={showCourses} showCoursesTable={showCoursesTable} /> 
-                    }
-                </Col>
+            <Row className='studyplan-text'>
                 {props.studyPlan ? <>
-                    <Col className='col-8' align='right'><p>tot credits:</p></Col>
+                    <Col className='col-10' align='right'><p>tot credits:</p></Col>
                     <Col className='col-2' align='center'><p>{props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0)}</p></Col>
                 </> : <></>
                 }
             </Row>
 
-            {showCourses ?
-                <>
-                    <Row className='mt-5'>
-                        <CourseTable courses={props.courses} studyPlan={true} handleAddCourse={handleAddCourse}/>
-                    </Row>
+            <Row align='left' className='studyplan-text mt-4'>
+                <h2>University Courses</h2>
+            </Row>
 
-                    <Row>
-                        <Col className='col-1' align='left'>
-                            <Button variant='success' onClick={hideCoursesTable}>Save</Button>
-                        </Col>
-                        <Col className='col-1' align='left'>
-                            <Button variant='danger' onClick={hideCoursesTable}>Cancel</Button>
-                        </Col>
-                    </Row>
-                </>
-                : <></>}
+            <Row className='mt-2'>
+                <CourseTable courses={props.courses} studyPlan={true} handleAddCourse={handleAddCourse} />
+            </Row>
+
+            <Row>
+                <Col className='col-1' align='left'>
+                    <Button variant='success'>Save</Button>
+                </Col>
+                <Col className='col-1' align='left'>
+                    <Button variant='danger'>Cancel</Button>
+                </Col>
+            </Row>
         </Container>
     )
 }
@@ -83,8 +69,8 @@ function StudyPlanTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.studyPlan ? props.studyPlan.courses.map(course =>
-                    <StudyPlanRow course={props.courses.find(c => c.code === course)} key={props.studyPlan.type + course} />)
+                {props.studyPlan ? props.studyPlan.map(course =>
+                    <StudyPlanRow course={props.courses.find(c => c.code === course)} key={props.type + course} />)
                     : <></>
                 }
             </tbody>
@@ -103,32 +89,10 @@ function StudyPlanRow(props) {
     );
 }
 
-function ButtonAdd(props) {
-    return (
-        <>
-            {!props.showCourses ?
-                <Button className='mt-5' variant='dark' size='md' onClick={props.showCoursesTable}>Add</Button>
-                : <></>
-            }
-        </>
-    );
-}
-
-function ButtonEdit(props) {
-    return (
-        <>
-            {!props.showCourses ?
-                <Button className='mt-5' variant='dark' size='md' onClick={props.showCoursesTable}>Edit</Button>
-                : <></>
-            }
-        </>
-    );
-}
-
 
 function ButtonDelete(props) {
     const handleDelete = () => {
-        toast.warning("Are you sure?", {position: "top-center", autoClose: false})
+        toast.warning("Are you sure?", { position: "top-center", autoClose: false })
     }
 
     return (
