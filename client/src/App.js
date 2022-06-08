@@ -69,7 +69,6 @@ function App() {
       setLoggedIn(true);
       toast.success(`Welcome, ${user.name} ${user.surname}!`, { position: "top-center" });
     } catch (err) {
-      console.log(err);
       toast.error(err, { position: "top-center" });
     }
   };
@@ -90,7 +89,7 @@ function App() {
         <Routes>
           <Route path="/" element={<DefaultLayout loggedIn={loggedIn} handleLogout={handleLogout} footerRef={footerRef} focusOnFooter={focusOnFooter} />}>
             <Route index element={<HomeLayout courses={courses} getCourses={getCourses} />} />
-            <Route path='/login' element={loggedIn ? <Navigate replace to='/' /> : <LoginLayout handleLogin={handleLogin} />} />
+            <Route path='/login' element={loggedIn ? <Navigate replace to='/studyplan' /> : <LoginLayout handleLogin={handleLogin} />} />
             <Route path='/studyplan' element={loggedIn ? <StudyPlanLayout courses={courses} studyPlan={studyPlan} setStudyPlan={setStudyPlan} loggedIn={loggedIn} setLoggedIn={setLoggedIn} /> : <Navigate replace to='/login' />} />
             <Route path='*' element={<NotFoundLayout />} />
           </Route>

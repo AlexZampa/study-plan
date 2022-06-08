@@ -101,3 +101,11 @@
   margin: 0;
   padding-left: 10px;
 }
+
+.plus-square-icon:hover{
+  color: green;
+}
+
+.trash-icon:hover{
+  color: red;
+}
