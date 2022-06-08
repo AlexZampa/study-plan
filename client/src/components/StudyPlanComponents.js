@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { CourseTable } from './CourseComponents';
 import { toast } from 'react-toastify';
 import StudyPlan from '../utils/StudyPlan';
+import { creditsRange } from '../utils/StudyPlan';
 import { Trash3Fill } from 'react-bootstrap-icons'
 
 function StudyPlanApp(props) {
@@ -23,14 +24,44 @@ function StudyPlanApp(props) {
                 return { isValid: false, errMsg: <div>Incompatible course:<br />{props.courses.find(c => c.code === incompatibleCourse).name}</div> };
         }
 
-        // check tot num of credits of studyPlan TODO
-        // if (props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0) + course.credits)
-        //     return { isValid: false, errMsg: <div>Incompatible course:<br />{props.courses.find(c => c.code === incompatibleCourse).name}</div> };
+        // check tot number of credits of studyPlan
+        const newTotCredits = props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0) + course.credits;
+        const maxCredits = creditsRange[props.studyPlan.type].max;
+        if (newTotCredits >  maxCredits)
+            return { isValid: false, errMsg: `Max number of credits for study plan ${props.studyPlan.type} is ${maxCredits}`};
         return { isValid: true };
     }
 
+    // TODO
     const checkRemoveCourse = (course) => {
-        return true;
+        const studyPlanCourses = [];
+        props.studyPlan.courses.forEach(c => {
+            studyPlanCourses.push(props.courses.find(course => c === course.code));
+        });
+
+        for (const spc of studyPlanCourses) {
+            if(spc.preparatoryCourse.find(pc => pc === course.code))
+                return { isValid: false, errMsg: "Course has reached maximum number of enrolled students" };
+        }
+
+
+            
+        // // check number of enrolled students
+        // if (course.enrolledStudents === course.maxStudents)
+        //     return { isValid: false, errMsg: "Course has reached maximum number of enrolled students" };
+        // // check incompatible courses
+        // for (const ic of course.incompatibleCourses) {
+        //     const incompatibleCourse = props.studyPlan.courses.find(sc => sc === ic);
+        //     if (incompatibleCourse)
+        //         return { isValid: false, errMsg: <div>Incompatible course:<br />{props.courses.find(c => c.code === incompatibleCourse).name}</div> };
+        // }
+
+        // // check tot number of credits of studyPlan
+        // const newTotCredits = props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0) + course.credits;
+        // const maxCredits = creditsRange[props.studyPlan.type].max;
+        // if (newTotCredits >  maxCredits)
+        //     return { isValid: false, errMsg: `Max number of credits for study plan ${props.studyPlan.type} is ${maxCredits}`};
+        return { isValid: true };
     }
 
     const handleAddCourse = (course) => {
@@ -41,7 +72,7 @@ function StudyPlanApp(props) {
             })
         }
         else
-            toast.error(check.errMsg, { toastId: check.errMsg, autoClose: 4000, hideProgressBar: false });
+            toast.error(check.errMsg, { toastId: check.errMsg, hideProgressBar: false });
     };
 
     const handleRemoveCourse = (course) => {
