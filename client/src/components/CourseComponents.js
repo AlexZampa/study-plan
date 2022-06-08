@@ -2,7 +2,7 @@ import { Button, Container, Table } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
-import { PlusSquareFill } from 'react-bootstrap-icons'
+import { PlusSquareFill, CheckLg } from 'react-bootstrap-icons'
 
 function CourseTable(props) {
     return (
@@ -36,9 +36,10 @@ function CourseRow(props) {
         <>
             <tr className={showInfo ? 'active-table-row' : undefined} onClick={changeInfoState}>
                 {props.studyPlan ?
-                    <td>
+                    <td align='center'>
                         {props.studyPlan.find(course => course === props.course.code) ?
-                            <></> :
+                            <CheckLg size={22}/>
+                            :
                             <PlusSquareFill className='plus-square-icon' size={22} onClick={(event) => { event.stopPropagation(); props.handleAddCourse(props.course); }} />
                         }
                     </td>
