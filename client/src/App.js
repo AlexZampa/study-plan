@@ -78,7 +78,6 @@ function App() {
     await API.logOut();
     setLoggedIn(false);
     toast.success('Succeffully logged out!', { position: "top-center" });
-    // setFilms([]);
   };
 
 

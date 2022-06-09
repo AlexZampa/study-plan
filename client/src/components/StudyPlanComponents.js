@@ -1,7 +1,6 @@
 import { Container, Row, Col, Table, Button } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
 import { CourseTable } from './CourseComponents';
 import { toast } from 'react-toastify';
 import StudyPlan from '../utils/StudyPlan';
@@ -32,35 +31,24 @@ function StudyPlanApp(props) {
         return { isValid: true };
     }
 
-    // TODO
     const checkRemoveCourse = (course) => {
         const studyPlanCourses = [];
         props.studyPlan.courses.forEach(c => {
             studyPlanCourses.push(props.courses.find(course => c === course.code));
         });
 
+        // check preparatory course
         for (const spc of studyPlanCourses) {
-            if(spc.preparatoryCourse.find(pc => pc === course.code))
-                return { isValid: false, errMsg: "Course has reached maximum number of enrolled students" };
+            if(spc.preparatoryCourse === course.code)
+                return { isValid: false, errMsg: <div>The course is a preparatory course of:<br />{spc.name}</div>};
         }
 
-
-            
-        // // check number of enrolled students
-        // if (course.enrolledStudents === course.maxStudents)
-        //     return { isValid: false, errMsg: "Course has reached maximum number of enrolled students" };
-        // // check incompatible courses
-        // for (const ic of course.incompatibleCourses) {
-        //     const incompatibleCourse = props.studyPlan.courses.find(sc => sc === ic);
-        //     if (incompatibleCourse)
-        //         return { isValid: false, errMsg: <div>Incompatible course:<br />{props.courses.find(c => c.code === incompatibleCourse).name}</div> };
-        // }
-
-        // // check tot number of credits of studyPlan
-        // const newTotCredits = props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0) + course.credits;
-        // const maxCredits = creditsRange[props.studyPlan.type].max;
-        // if (newTotCredits >  maxCredits)
-        //     return { isValid: false, errMsg: `Max number of credits for study plan ${props.studyPlan.type} is ${maxCredits}`};
+        // check tot number of credits of studyPlan
+        const newTotCredits = props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0) - course.credits;
+        const minCredits = creditsRange[props.studyPlan.type].min;
+        if(newTotCredits < minCredits){
+            return { isValid: false, errMsg: `Min number of credits for study plan ${props.studyPlan.type} is ${minCredits}`};
+        }
         return { isValid: true };
     }
 
@@ -69,18 +57,23 @@ function StudyPlanApp(props) {
         if (check.isValid) {
             props.setStudyPlan((oldStudyPlan) => {
                 return new StudyPlan(oldStudyPlan.type, [...oldStudyPlan.courses, course.code]);
-            })
+            });
         }
-        else
-            toast.error(check.errMsg, { toastId: check.errMsg, hideProgressBar: false });
+        else{
+            course.showErr = true;
+            toast.error(check.errMsg, { toastId: check.errMsg, autoClose: 4000,  pauseOnHover: true, hideProgressBar: false });
+        }
     };
 
     const handleRemoveCourse = (course) => {
-        if (checkRemoveCourse(course)) {
+        const check = checkRemoveCourse(course);
+        if (check.isValid) {
             props.setStudyPlan((oldStudyPlan) => {
                 return new StudyPlan(oldStudyPlan.type, oldStudyPlan.courses.filter(c => c !== course.code));
-            })
+            });
         }
+        else
+            toast.error(check.errMsg, { toastId: check.errMsg, autoClose: 4000, pauseOnHover: true, hideProgressBar: false });
     }
 
     return (
@@ -110,7 +103,7 @@ function StudyPlanApp(props) {
             </Row>
 
             <Row className='mt-2'>
-                <CourseTable courses={props.courses} studyPlan={props.studyPlan.courses} handleAddCourse={handleAddCourse} />
+                <CourseTable courses={props.courses} studyPlan={props.studyPlan.courses} handleAddCourse={handleAddCourse}/>
             </Row>
 
             <Row>

@@ -1,7 +1,7 @@
 import { Button, Container, Table } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { PlusSquareFill, CheckLg } from 'react-bootstrap-icons'
 
 function CourseTable(props) {
@@ -19,7 +19,7 @@ function CourseTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code} studyPlan={props.studyPlan} handleAddCourse={props.handleAddCourse} />)}
+                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code} studyPlan={props.studyPlan} handleAddCourse={props.handleAddCourse} showErr={props.showErr} />)}
                 </tbody>
             </Table>
         </Container>
@@ -29,24 +29,25 @@ function CourseTable(props) {
 
 function CourseRow(props) {
     const [showInfo, setShowInfo] = useState(false);
-
+    
     const changeInfoState = () => { setShowInfo(!showInfo); }
 
     return (
         <>
-            <tr className={showInfo ? 'active-table-row' : undefined} onClick={changeInfoState}>
+            <tr className={props.course.showErr ? 'error-table-row' : showInfo ? 'active-table-row' : ''} onClick={changeInfoState}>
                 {props.studyPlan ?
-                    <td align='center'>
+                    <td>
                         {props.studyPlan.find(course => course === props.course.code) ?
-                            <CheckLg size={22}/>
+                            <CheckLg size={22} />
                             :
                             <PlusSquareFill className='plus-square-icon' size={22} onClick={(event) => { event.stopPropagation(); props.handleAddCourse(props.course); }} />
                         }
                     </td>
-                    : <></>}
+                    : <></>
+                }
                 <CourseData course={props.course} />
             </tr>
-            {showInfo ? <CourseInfo courses={props.courses} course={props.course} /> : <></>}
+            {showInfo ? <CourseInfo courses={props.courses} course={props.course} studyPlan={props.studyPlan} /> : <></>}
         </>
     )
 };
@@ -68,8 +69,8 @@ function CourseInfo(props) {
     return (
         <>
             <tr className='table-row-info' align='center'>
-                <td></td>
-                <th className='table-header-info' colSpan={1}>preparatory course </th>
+                {props.studyPlan ? <td></td> : <></>}
+                <td className='table-header-info' colSpan={1}>preparatory course </td>
                 {props.course.preparatoryCourse ?
                     <>
                         <td align='center' colSpan={1}> {props.course.preparatoryCourse ? props.course.preparatoryCourse : '-'}</td>
@@ -79,8 +80,8 @@ function CourseInfo(props) {
                 }
             </tr>
             <tr className='table-row-info' align='center' key={(`${props.course.code}${props.course.incompatibleCourses[0]}`)}>
-                <td></td>
-                <th className='table-header-info'> incompatible courses </th>
+                {props.studyPlan ? <td></td> : <></>}
+                <td className='table-header-info'> incompatible courses </td>
                 {props.course.incompatibleCourses[0] ?
                     <>
                         <td colSpan={1} align='center'>
