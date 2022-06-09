@@ -1,14 +1,21 @@
 import React from "react";
-import { Container, Navbar } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 
-function FooterApp(props) {
+function FooterBar(props) {
     return (
-        <Navbar expand="lg" bg="dark" variant="dark" className="footer" ref={props.footerRef}>
-            <Container className="footer-items">
-                <Navbar.Brand href="#home">Footer</Navbar.Brand>
+        <footer className="footer" ref={props.footerRef}>
+            <Container>
+                <Row>
+                    <Col className="col-6" align='left'>
+                        <p>&copy; 2022 - Alessandro Zamparutti</p>
+                    </Col>
+                    <Col className="col-6" align='right'>
+                        <p>s301132@studenti.it</p>
+                    </Col>
+                </Row>
             </Container>
-        </Navbar>
+        </footer>
     );
 };
 
-export default FooterApp;
+export default FooterBar;

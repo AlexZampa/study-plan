@@ -14,10 +14,14 @@ function NavBarApp(props) {
                 </Navbar.Brand>
             </Link>
             <Nav className="ms-auto ">
-                <Link to='/studyplan' className='nav-link'>
-                    <Navbar.Text className='nav-items'>MyStudyPlan</Navbar.Text>
-                </Link>
-                <Nav.Link className='nav-items' onClick={props.focusOnFooter}>Info</Nav.Link>
+                {props.hideMenu ? <></> :
+                    <>
+                        <Link to='/studyplan' className='nav-link'>
+                            <Navbar.Text className='nav-items'>MyStudyPlan</Navbar.Text>
+                        </Link>
+                        <Nav.Link className='nav-items' onClick={props.focusOnFooter}>Contact me</Nav.Link>
+                    </>
+                }
             </Nav>
             <Nav className='nav-border-left'>
                 {props.loggedIn ?

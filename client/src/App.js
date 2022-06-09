@@ -38,7 +38,7 @@ function App() {
 
   // use effect: get courses
   useEffect(() => {
-      getCourses();
+    getCourses();
   }, []);
 
 
@@ -50,11 +50,6 @@ function App() {
     } catch (err) { }
   }
 
-  const focusOnFooter = () => {
-    if (footerRef.current) {
-      footerRef.current.scrollIntoView();
-    }
-  };
 
   // get list of courses
   const getCourses = async () => {
@@ -80,16 +75,56 @@ function App() {
     toast.success('Succeffully logged out!', { position: "top-center" });
   };
 
+  // update study plan
+  const modifyStudyPlan = async (studyPlan) => {
+    try {
+      await API.updateStudyPlan(studyPlan);
+      getCourses();
+      getStudyPlan();
+    } catch (err) {
+      toast.error('error');
+    }
+  };
+
+  // create study plan
+  const createStudyPlan = async (studyPlan) => {
+    try {
+      await API.createStudyPlan(studyPlan);
+      getCourses();
+      getStudyPlan();
+    } catch (err) {
+      toast.error('error');
+    }
+  };
+
+  // create study plan
+  const deleteStudyPlan = async () => {
+    try {
+      await API.deleteStudyPlan();
+      getCourses();
+      getStudyPlan();
+    } catch (err) {
+      toast.error('error');
+    }
+  };
+
+  // set focus on footer
+  const focusOnFooter = () => {
+    if (footerRef.current) {
+      footerRef.current.scrollIntoView();
+    }
+  };
 
   return (
     <BrowserRouter>
       <ToastContainer position="top-right" theme="light" autoClose={3000} hideProgressBar={true} newestOnTop={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover={false} limit={3} transition={Slide} />
       <Container fluid className='App'>
         <Routes>
+          <Route path='/login' element={loggedIn ? <Navigate replace to='/studyplan' /> : <LoginLayout handleLogin={handleLogin} />} />
           <Route path="/" element={<DefaultLayout loggedIn={loggedIn} handleLogout={handleLogout} footerRef={footerRef} focusOnFooter={focusOnFooter} />}>
             <Route index element={<HomeLayout courses={courses} getCourses={getCourses} />} />
-            <Route path='/login' element={loggedIn ? <Navigate replace to='/studyplan' /> : <LoginLayout handleLogin={handleLogin} />} />
-            <Route path='/studyplan' element={loggedIn ? <StudyPlanLayout courses={courses} studyPlan={studyPlan} setStudyPlan={setStudyPlan} loggedIn={loggedIn} setLoggedIn={setLoggedIn} /> : <Navigate replace to='/login' />} />
+            <Route path='/studyplan' element={loggedIn ? <StudyPlanLayout courses={courses} studyPlan={studyPlan} setStudyPlan={setStudyPlan} loggedIn={loggedIn} getStudyPlan={getStudyPlan}
+              modifyStudyPlan={modifyStudyPlan} createStudyPlan={createStudyPlan} deleteStudyPlan={deleteStudyPlan} /> : <Navigate replace to='/login' />} />
             <Route path='*' element={<NotFoundLayout />} />
           </Route>
         </Routes>

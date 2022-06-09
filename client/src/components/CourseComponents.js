@@ -34,7 +34,7 @@ function CourseRow(props) {
 
     return (
         <>
-            <tr className={props.course.showErr ? 'error-table-row' : showInfo ? 'active-table-row' : ''} onClick={changeInfoState}>
+            <tr className={showInfo ? 'active-table-row' : ''} onClick={changeInfoState}>
                 {props.studyPlan ?
                     <td>
                         {props.studyPlan.find(course => course === props.course.code) ?

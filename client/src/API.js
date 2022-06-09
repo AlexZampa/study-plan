@@ -21,7 +21,7 @@ const getAllCourses = async () => {
 
 const getStudyPlan = async () => {
   try {
-    const response = await fetch(SERVER_URL + '/api/user/studyplan', { credentials: 'include' });
+    const response = await fetch(SERVER_URL + '/api/studyplan', { credentials: 'include' });
     const studyPlan = await response.json();
     if (response.ok) {
       return new StudyPlan(studyPlan.type, studyPlan.courses.map(s => s.code));
@@ -31,6 +31,58 @@ const getStudyPlan = async () => {
         return '';
       throw studyPlan;
     }
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
+const updateStudyPlan = async (studyPlan) => {
+  try {
+    const response = await fetch(SERVER_URL + '/api/studyplan', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ "type": studyPlan.type, "courses": studyPlan.courses.map(courseCode => { return { "code": courseCode } }) })
+    });
+    if (!response.ok) {
+      const errMessage = await response.json();
+      throw errMessage;
+    }
+    else return null;
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
+const createStudyPlan = async (studyPlan) => {
+  try {
+    const response = await fetch(SERVER_URL + '/api/studyplan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ "type": studyPlan.type, "courses": studyPlan.courses.map(courseCode => { return { "code": courseCode } }) })
+    });
+    if (!response.ok) {
+      const errMessage = await response.json();
+      throw errMessage;
+    }
+    else return null;
+  } catch (err) {
+    throw new Error(err.msg);
+  }
+};
+
+const deleteStudyPlan = async (studyPlan) => {
+  try {
+    const response = await fetch(SERVER_URL + '/api/studyplan', {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      const errMessage = await response.json();
+      throw errMessage;
+    }
+    else return null;
   } catch (err) {
     throw new Error(err.msg);
   }
@@ -78,5 +130,5 @@ const logOut = async () => {
 }
 
 
-const API = { getAllCourses, getUserInfo, logIn, logOut, getStudyPlan };
+const API = { getAllCourses, getUserInfo, logIn, logOut, getStudyPlan, updateStudyPlan, createStudyPlan, deleteStudyPlan };
 export default API;

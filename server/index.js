@@ -79,7 +79,7 @@ app.get('/api/courses', async (req, res) => {
 });
 
 // GET STUDY PLAN
-app.get('/api/user/studyplan', isLoggedIn,
+app.get('/api/studyplan', isLoggedIn,
   async (req, res) => { 
     try {
       const result = await studyPlanDAO.getStudyPlan(req.user.id);
@@ -94,7 +94,7 @@ app.get('/api/user/studyplan', isLoggedIn,
   });
 
 // CREATE STUDY PLAN
-app.post('/api/user/studyplan',
+app.post('/api/studyplan',
   [check("type").exists().isString().trim().notEmpty(),
   check("courses").exists().isArray(),
     isLoggedIn],
@@ -130,7 +130,7 @@ app.post('/api/user/studyplan',
 
 
 // MODIFY STUDY PLAN
-app.put('/api/user/studyplan',
+app.put('/api/studyplan',
   [check("type").exists().isString().trim().notEmpty(),
   check("courses").exists().isArray(),
     isLoggedIn],
@@ -166,7 +166,7 @@ app.put('/api/user/studyplan',
 
 
 // DELETE STUDY PLAN
-app.delete('/api/user/studyplan', isLoggedIn,
+app.delete('/api/studyplan', isLoggedIn,
   async (req, res) => { 
     try {
       const result = await studyPlanDAO.deleteStudyPlan(req.user.id);

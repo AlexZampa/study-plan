@@ -5,17 +5,18 @@
   padding: 0;
 }
 
-.footer-items {
-  text-align: center;
-  margin: 0;
-  padding: 0;
-}
 
 .footer {
-  position: relative; 
-  bottom: 0;
-  margin-top: 5em;
+  background-color: black;
+  color: white;
+  margin-top: 2em;
+  height: 5vh;
+  line-height: 4vh;
   width: 100vw; 
+}
+
+.footer p{
+  font-style: italic;
 }
 
 .nav-items{
@@ -91,8 +92,10 @@
 }
 
 .studyplan-text{
-  font-family: 'Cera GR Medium', Fallback, sans-serif;
-  font-weight: 200;
+  font-weight: 300;
+  font-size: 20px;
+  margin: 0;
+  padding-left: 10px;
 }
 
 .studyplan-text h2{
@@ -101,13 +104,6 @@
   margin-left: 5px;
 }
 
-
-.studyplan-text p{
-  font-size: 20px;
-  font-weight: 300;
-  margin: 0;
-  padding-left: 10px;
-}
 
 .plus-square-icon:hover{
   color: green;
