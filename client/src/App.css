@@ -104,8 +104,9 @@
 
 .studyplan-text h2 {
   font-size: 26px;
-  font-weight: 400;
+  font-weight: 500;
   margin-left: 5px;
+  letter-spacing: .1rem;
 }
 
 
@@ -127,10 +128,10 @@
   --table-bg-active-color: rgba(224, 224, 224, 0.788);
   --table-bg-hover-color: rgba(211, 211, 211, 0.425);
   --table-info-color: #474747a9;
-  --table-error-color: red;
+  --table-error-color: #f74949;
   --trash-icon-hover-color: #f74949;
   --table-icon-color: black;
-  --table-icon-hover-color: #f36d6d;
+  --table-icon-hover-color: hsl(128, 44%, 34%);
   --footer-bg-color: black;
   --footer-text-color: lightgrey;
 }

@@ -19,7 +19,10 @@ function CourseTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code} studyPlan={props.studyPlan} handleAddCourse={props.handleAddCourse} checkAddCourse={props.checkAddCourse}/>)}
+                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code}
+                        addColumn={props.studyPlan ? true : false} handleAddCourse={props.handleAddCourse}
+                        courseInStudyplan={props.studyPlan && props.studyPlan.find(c => c === course.code) ? true : false}
+                        showErr={props.studyPlan && !props.studyPlan.find(courseCode => courseCode === course.code) && !props.checkAddCourse(course).isValid} />)}
                 </tbody>
             </Table>
         </Container>
@@ -29,23 +32,23 @@ function CourseTable(props) {
 
 function CourseRow(props) {
     const [showInfo, setShowInfo] = useState(false);
-    
+
     const changeInfoState = () => { setShowInfo(!showInfo); }
 
     let rowStyle = '';
-    if(showInfo){
+    if (showInfo) {
         rowStyle = 'active-table-row';
     }
-    if(props.studyPlan && !props.studyPlan.find(c => c === props.course.code) && !props.checkAddCourse(props.course).isValid){
+    if (props.showErr) {
         rowStyle += ' error-table-row';
     }
 
     return (
         <>
             <tr className={rowStyle} onClick={changeInfoState}>
-                {props.studyPlan ?
+                {props.addColumn ?
                     <td>
-                        {props.studyPlan.find(course => course === props.course.code) ?
+                        {props.courseInStudyplan ?
                             <CheckLg className='table-icon' size={22} />
                             :
                             <PlusSquareFill className='table-icon table-icon-hover' size={22} onClick={(event) => { event.stopPropagation(); props.handleAddCourse(props.course); }} />
@@ -55,7 +58,7 @@ function CourseRow(props) {
                 }
                 <CourseData course={props.course} />
             </tr>
-            {showInfo ? <CourseInfo courses={props.courses} course={props.course} studyPlan={props.studyPlan} /> : <></>}
+            {showInfo ? <CourseInfo courses={props.courses} course={props.course} addColumn={props.addColumn} /> : <></>}
         </>
     )
 };
@@ -77,53 +80,64 @@ function CourseInfo(props) {
     return (
         <>
             <tr className='table-row-info' align='center'>
-                {props.studyPlan ? <td></td> : <></>}
+                {props.addColumn ? <td></td> : <></>}
                 <td className='table-header-info' colSpan={1}>preparatory course </td>
                 {props.course.preparatoryCourse ?
                     <>
-                        <td align='center' colSpan={1}> {props.course.preparatoryCourse ? props.course.preparatoryCourse : '-'}</td>
-                        <td align='left' colSpan={3}> {props.course.preparatoryCourse ? props.courses.find(c => c.code === props.course.preparatoryCourse).name : '-'}</td>
+                        <td align='center' colSpan={1}>
+                            {props.course.preparatoryCourse}</td>
+                        <td align='left' colSpan={3}>
+                            {props.courses.find(c => c.code === props.course.preparatoryCourse).name}</td>
                     </>
-                    : <></>
+                    :
+                    <></>
                 }
             </tr>
-            <tr className='table-row-info' align='center' key={(`${props.course.code}${props.course.incompatibleCourses[0]}`)}>
-                {props.studyPlan ? <td></td> : <></>}
+
+            <tr className='table-row-info' align='center'>
+                {props.addColumn ? <td></td> : <></>}
                 <td className='table-header-info'> incompatible courses </td>
                 {props.course.incompatibleCourses[0] ?
-                    <>
-                        <td colSpan={1} align='center'>
-                            {props.course.incompatibleCourses[0]}
-                        </td>
-                        <td colSpan={3} align='left'>
-                            {props.courses.find((c) => c.code === props.course.incompatibleCourses[0]).name}
-                        </td>
-                    </>
-                    : <></>
+                    <IncompatibleCourseData first={true} course={props.courses.find((c) => c.code === props.course.incompatibleCourses[0])} />
+                    :
+                    <></>
                 }
             </tr>
-            {props.course.incompatibleCourses.map((ic, idx) => {
-                const incompatibleCourse = props.courses.find((c) => c.code === ic)
-                if (idx === 0) {
-                    return (<></>);
-                } else {
-                    return (
-                        <tr className='table-row-info' key={`${props.course.code}${incompatibleCourse.code}`}>
-                            <td colSpan={2}></td>
-                            <td colSpan={1} align='center'>
-                                {incompatibleCourse.code}
-                            </td>
-                            <td colSpan={3} align='left'>
-                                {incompatibleCourse.name}
-                            </td>
-                        </tr>
-                    );
-                }
-            })}
-            <tr className='bordered-table-row'></tr>
+
+            {props.course.incompatibleCourses.map((ic, idx) =>
+                <IncompatibleCourseData course={props.courses.find((c) => c.code === ic)} idx={idx} addColumn={props.addColumn} key={idx} />
+            )}
+
+            <tr className='bordered-table-row' key={`border${props.course.code}`}></tr>
         </>
     );
 }
+
+
+function IncompatibleCourseData(props) {
+    if (props.first)
+        return (
+            <>
+                <td colSpan={1} align='center'> {props.course.code} </td>
+                <td colSpan={3} align='left'>{props.course.name} </td>
+            </>
+        );
+    else
+        return (
+            <>
+                {props.idx === 0 ?
+                    <></>
+                    :
+                    <tr className='table-row-info'>
+                        <td colSpan={props.addColumn ? 2 : 1}></td>
+                        <td colSpan={1} align='center'> {props.course.code} </td>
+                        <td colSpan={3} align='left'> {props.course.name} </td>
+                    </tr>
+                }
+            </>
+        );
+}
+
 
 
 export { CourseTable };
