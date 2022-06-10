@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer, Slide, toast } from 'react-toastify';
 import { useEffect, useState, useRef } from 'react';
-import { HomeLayout, NotFoundLayout, DefaultLayout, LoginLayout, StudyPlanLayout } from './components/PageLayout';
+import { HomeLayout, NotFoundLayout, DefaultLayout, LoginLayout, StudyPlanLayout } from './layout/PageLayout';
 import { Container } from 'react-bootstrap';
 import API from './API';
 

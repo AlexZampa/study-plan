@@ -1,11 +1,11 @@
 import { Row, Col, Button, Container } from 'react-bootstrap';
 import { Link, Outlet } from 'react-router-dom';
-import { CourseTable } from './CourseComponents';
-import { LoginForm } from './LoginComponents';
-import FooterBar from './FooterComponents';
-import { NavBar } from './NavBarComponents';
+import { CourseTable } from '../components/CourseComponents';
+import { LoginForm } from '../components/LoginComponents';
+import FooterBar from '../components/FooterComponents';
+import { NavBar } from '../components/NavBarComponents';
 import { useEffect } from 'react';
-import StudyPlanPage from './StudyPlanComponents';
+import StudyPlanPage from '../components/StudyPlanComponents';
 
 
 function DefaultLayout(props) {
