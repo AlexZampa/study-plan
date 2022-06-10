@@ -80,7 +80,7 @@ app.get('/api/courses', async (req, res) => {
 
 // GET STUDY PLAN
 app.get('/api/studyplan', isLoggedIn,
-  async (req, res) => { 
+  async (req, res) => {
     try {
       const result = await studyPlanDAO.getStudyPlan(req.user.id);
       return res.status(200).json(result);
@@ -134,7 +134,7 @@ app.put('/api/studyplan',
   [check("type").exists().isString().trim().notEmpty(),
   check("courses").exists().isArray(),
     isLoggedIn],
-  async (req, res) => { 
+  async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -148,10 +148,11 @@ app.put('/api/studyplan',
         courses.push(c.code);
       }
       const studyPlan = new StudyPlan(req.body.type, courses);
-      const isValid = await checkStudyPlan(studyPlan);
+      const oldStudyPlan = await studyPlanDAO.getStudyPlan(req.user.id);
+      const isValid = await checkStudyPlan(studyPlan, oldStudyPlan);
       if (isValid) {
         const resultDelete = await studyPlanDAO.deleteStudyPlan(req.user.id);
-        const result = await studyPlanDAO.createStudyPlan(studyPlan, req.user.id); 
+        const result = await studyPlanDAO.createStudyPlan(studyPlan, req.user.id);
         return res.status(200).end();
       }
       return res.status(422).end();
@@ -167,7 +168,7 @@ app.put('/api/studyplan',
 
 // DELETE STUDY PLAN
 app.delete('/api/studyplan', isLoggedIn,
-  async (req, res) => { 
+  async (req, res) => {
     try {
       const result = await studyPlanDAO.deleteStudyPlan(req.user.id);
       return res.status(204).end();
@@ -179,7 +180,7 @@ app.delete('/api/studyplan', isLoggedIn,
 
 
 
-async function checkStudyPlan(studyPlan) {
+async function checkStudyPlan(studyPlan, oldStudyPlan) {
   try {
     const courses = [];
     let totCredits = 0;
@@ -210,15 +211,21 @@ async function checkStudyPlan(studyPlan) {
 
     for (const course of courses) {
       // check if maximum number of student enrolled
-      if (course.maxStudents !== null && (course.enrolledStudents + 1) > course.maxStudents) {
+       // check if old study plan had already the course
+      const alreadyCounted = oldStudyPlan && oldStudyPlan.courses.find(c => c.code === course.code);
+      // if not increment num of enrolledStudents
+      const numEnrolledStudents = alreadyCounted ? course.enrolledStudents : course.enrolledStudents + 1;
+      if (course.maxStudents !== null && numEnrolledStudents > course.maxStudents) {
         console.log(`Course ${course.code} has maximum number of enrolled students`);
         return false;
       }
+
       // if prepparatoryCourse not in the studyPlan -> invalid
       if (course.preparatoryCourse !== null && !courses.find(c => c.code === course.preparatoryCourse)) {
         console.log('Missing preparatory course of ' + course.code + ' - ' + course.preparatoryCourse);
         return false;
       }
+
       // search for incompatible courses
       for (const ic of course.incompatibleCourses) {
         if (courses.find(co => co.code === ic.code)) {

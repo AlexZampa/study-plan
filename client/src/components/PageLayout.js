@@ -5,7 +5,6 @@ import { LoginForm } from './LoginComponents';
 import FooterBar from './FooterComponents';
 import { NavBarApp } from './NavBarComponents';
 import { useEffect } from 'react';
-import API from '../API';
 import StudyPlanApp from './StudyPlanComponents';
 
 
@@ -80,7 +79,7 @@ function StudyPlanLayout(props) {
         <h1 className='main-header'>Study Plan</h1>
       </Row>
       <Row className='m-5'>
-        <StudyPlanApp studyPlan={props.studyPlan} setStudyPlan={props.setStudyPlan} courses={props.courses} getStudyPlan={props.getStudyPlan}
+        <StudyPlanApp studyPlan={props.studyPlan} setStudyPlan={props.setStudyPlan} courses={props.courses} updateCourse={props.updateCourse} getStudyPlan={props.getStudyPlan}
           modifyStudyPlan={props.modifyStudyPlan} createStudyPlan={props.createStudyPlan} deleteStudyPlan={props.deleteStudyPlan} />
       </Row>
     </Container>

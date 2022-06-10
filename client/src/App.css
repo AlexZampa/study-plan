@@ -7,108 +7,130 @@
 
 
 .footer {
-  background-color: black;
-  color: white;
+  background-color: var(--footer-bg-color);
+  color: var(--footer-text-color);
   margin-top: 2em;
   height: 5vh;
   line-height: 4vh;
-  width: 100vw; 
+  width: 100vw;
 }
 
-.footer p{
+.footer p {
   font-style: italic;
 }
 
-.nav-items{
+.nav-items {
   padding-left: 1rem;
   padding-right: 1rem;
-  color: lightgrey !important;
+  color: var(--navbar-text-color) !important;
   font-size: large;
 }
 
-.navbar{
+.navbar {
   margin-bottom: 10em;
 }
 
 .nav-border-left {
   margin-left: 2em;
-  border-left: 1px solid silver;
+  border-left: 1px solid var(--navbar-color);
 }
 
-.nav-link{
+.nav-link {
   text-decoration: none;
 }
 
-.main-header{ 
-  color: #f87a7a;
+.main-header {
+  color: var(--main-color);
   letter-spacing: .2rem;
   text-align: left;
-  height:auto;
+  height: auto;
   margin-left: 1.5em;
 }
 
-.course-table{
+.course-table {
   margin-left: 5px;
   margin-right: 5px;
 }
 
-.course-table tbody tr:hover{
-  background-color: rgba(211, 211, 211, 0.425);
+.course-table tbody tr:hover {
+  background-color: var(--table-bg-hover-color);
 }
 
-.active-table-row{
-  background-color: rgba(224, 224, 224, 0.788);
+.active-table-row {
+  background-color: var(--table-bg-active-color);
 }
 
-.bordered-table-row{
+.bordered-table-row {
   border-bottom: 1px solid black !important;
-  padding:10px;
+  padding: 10px;
 }
 
 
-.table-header-info{
+.table-header-info {
   font-weight: 700;
 }
 
-.error-table-row{
-  background-color: red;
-} 
+.error-table-row {
+  color: var(--table-error-color);
+}
 
 /*remove the borders*/
-.table-row-info{
+.table-row-info {
   border: white;
-  color: #474747a9;
+  color: var(--table-info-color);
 }
 
 /*remove the hover*/
-.table-row-info:hover{
+.table-row-info:hover {
   background-color: white !important;
 }
 
-.login-form{
- margin-right: 20vw;
- margin-left: 20vw;
- margin-bottom: 1em;
+.login-form {
+  margin-right: 20vw;
+  margin-left: 20vw;
+  margin-bottom: 1em;
 }
 
-.studyplan-text{
+.studyplan-text {
   font-weight: 300;
   font-size: 20px;
   margin: 0;
   padding-left: 10px;
 }
 
-.studyplan-text h2{
+.studyplan-text-error {
+  color: var(--table-error-color);
+}
+
+.studyplan-text h2 {
   font-size: 26px;
   font-weight: 400;
   margin-left: 5px;
 }
 
 
-.plus-square-icon:hover{
-  color: green;
+.table-icon {
+  color: var(--table-icon-color);
 }
 
-.trash-icon:hover{
-  color: red;
+.table-icon-hover:hover {
+  color: var(--table-icon-hover-color);
+}
+
+.trash-icon:hover {
+  color: var(--trash-icon-hover-color);
+}
+
+:root {
+  --main-color: #f87a7a;
+  --navbar-text-color: lightgrey;
+  --table-bg-active-color: rgba(224, 224, 224, 0.788);
+  --table-bg-hover-color: rgba(211, 211, 211, 0.425);
+  --table-info-color: #474747a9;
+  --table-error-color: red;
+  --trash-icon-hover-color: #f74949;
+  --table-icon-color: black;
+  --table-icon-hover-color: #f36d6d;
+  --footer-bg-color: black;
+  --footer-text-color: lightgrey;
 }

@@ -108,6 +108,18 @@ function App() {
     }
   };
 
+
+  const updateCourse = (course) => {
+    setCourses(oldCourses => {
+      return oldCourses.map(c => {
+        if (c.code === course.code) {
+          return course;
+        }
+        else return c;
+      })
+    });
+  }
+
   // set focus on footer
   const focusOnFooter = () => {
     if (footerRef.current) {
@@ -123,7 +135,7 @@ function App() {
           <Route path='/login' element={loggedIn ? <Navigate replace to='/studyplan' /> : <LoginLayout handleLogin={handleLogin} />} />
           <Route path="/" element={<DefaultLayout loggedIn={loggedIn} handleLogout={handleLogout} footerRef={footerRef} focusOnFooter={focusOnFooter} />}>
             <Route index element={<HomeLayout courses={courses} getCourses={getCourses} />} />
-            <Route path='/studyplan' element={loggedIn ? <StudyPlanLayout courses={courses} studyPlan={studyPlan} setStudyPlan={setStudyPlan} loggedIn={loggedIn} getStudyPlan={getStudyPlan}
+            <Route path='/studyplan' element={loggedIn ? <StudyPlanLayout courses={courses} updateCourse={updateCourse} studyPlan={studyPlan} setStudyPlan={setStudyPlan} loggedIn={loggedIn} getStudyPlan={getStudyPlan}
               modifyStudyPlan={modifyStudyPlan} createStudyPlan={createStudyPlan} deleteStudyPlan={deleteStudyPlan} /> : <Navigate replace to='/login' />} />
             <Route path='*' element={<NotFoundLayout />} />
           </Route>

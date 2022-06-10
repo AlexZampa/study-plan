@@ -19,7 +19,7 @@ function CourseTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code} studyPlan={props.studyPlan} handleAddCourse={props.handleAddCourse} showErr={props.showErr} />)}
+                    {props.courses.map((course) => <CourseRow courses={props.courses} course={course} key={course.code} studyPlan={props.studyPlan} handleAddCourse={props.handleAddCourse} checkAddCourse={props.checkAddCourse}/>)}
                 </tbody>
             </Table>
         </Container>
@@ -32,15 +32,23 @@ function CourseRow(props) {
     
     const changeInfoState = () => { setShowInfo(!showInfo); }
 
+    let rowStyle = '';
+    if(showInfo){
+        rowStyle = 'active-table-row';
+    }
+    if(props.studyPlan && !props.studyPlan.find(c => c === props.course.code) && !props.checkAddCourse(props.course).isValid){
+        rowStyle += ' error-table-row';
+    }
+
     return (
         <>
-            <tr className={showInfo ? 'active-table-row' : ''} onClick={changeInfoState}>
+            <tr className={rowStyle} onClick={changeInfoState}>
                 {props.studyPlan ?
                     <td>
                         {props.studyPlan.find(course => course === props.course.code) ?
-                            <CheckLg size={22} />
+                            <CheckLg className='table-icon' size={22} />
                             :
-                            <PlusSquareFill className='plus-square-icon' size={22} onClick={(event) => { event.stopPropagation(); props.handleAddCourse(props.course); }} />
+                            <PlusSquareFill className='table-icon table-icon-hover' size={22} onClick={(event) => { event.stopPropagation(); props.handleAddCourse(props.course); }} />
                         }
                     </td>
                     : <></>
