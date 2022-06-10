@@ -78,6 +78,7 @@ app.get('/api/courses', async (req, res) => {
   }
 });
 
+
 // GET STUDY PLAN
 app.get('/api/studyplan', isLoggedIn,
   async (req, res) => {
@@ -159,6 +160,7 @@ app.put('/api/studyplan',
     } catch (err) {
       console.log(err);
       switch (err.err) {
+        case 404: return res.status(404).end();
         case 422: return res.status(422).end();
         default: return res.status(503).end();
       }
@@ -211,7 +213,7 @@ async function checkStudyPlan(studyPlan, oldStudyPlan) {
 
     for (const course of courses) {
       // check if maximum number of student enrolled
-       // check if old study plan had already the course
+      // check if old study plan had already the course
       const alreadyCounted = oldStudyPlan && oldStudyPlan.courses.find(c => c.code === course.code);
       // if not increment num of enrolledStudents
       const numEnrolledStudents = alreadyCounted ? course.enrolledStudents : course.enrolledStudents + 1;
@@ -258,7 +260,6 @@ app.post('/api/sessions', function (req, res, next) {
     req.login(user, (err) => {
       if (err)
         return next(err);
-
       return res.status(201).json(req.user);
     });
   })(req, res, next);
@@ -267,18 +268,25 @@ app.post('/api/sessions', function (req, res, next) {
 
 // GET /api/sessions/current
 app.get('/api/sessions/current', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json(req.user);
+  try {
+    if (req.isAuthenticated())
+      return res.status(200).json(req.user);
+    else
+      return res.status(401).json({ error: 'Not authenticated' });
+  } catch (err) {
+    return res.status(500).end();
   }
-  else
-    res.status(401).json({ error: 'Not authenticated' });
 });
 
 // DELETE /api/session/current
 app.delete('/api/sessions/current', (req, res) => {
-  req.logout(() => {
-    res.end();
-  });
+  try {
+    req.logout(() => {
+      res.status(200).end();
+    });
+  } catch (err) {
+    return res.status(503).end();
+  }
 });
 
 

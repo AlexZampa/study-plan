@@ -1,7 +1,7 @@
-import { Button, Container, Table } from 'react-bootstrap';
+import { Container, Table } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import { PlusSquareFill, CheckLg } from 'react-bootstrap-icons'
 
 function CourseTable(props) {

@@ -15,8 +15,6 @@ exports.getAllCourses = async () => {
             for (const ic of rows) {
                 if (ic.courseCode === c.code)
                     c.addIncompatibleCourse(ic.incompatibleCourseCode);
-                if (ic.incompatibleCourseCode === c.code)
-                    c.addIncompatibleCourse(ic.courseCode);
             }
         });
         return courses;
@@ -31,13 +29,10 @@ exports.getCourseByCode = async (code) => {
         let sql = 'SELECT * FROM Courses WHERE code = ?';
         const row = await db.DBget(sql, [code]);
         const course = new Course(row.code, row.name, row.credits, row.enrolledStudents, row.maxStudents, row.preparatoryCourseCode);
-        sql = "SELECT * FROM IncompatibleCourses";
-        const rows = await db.DBgetAll(sql, []);
+        sql = "SELECT * FROM IncompatibleCourses WHERE courseCode = ?";
+        const rows = await db.DBgetAll(sql, [code]);
         for (const ic of rows) {
-            if (ic.courseCode === course.code)
-                course.addIncompatibleCourse(ic.incompatibleCourseCode);
-            if (ic.incompatibleCourseCode === course.code)
-                course.addIncompatibleCourse(ic.courseCode);
+            course.addIncompatibleCourse(ic.incompatibleCourseCode);
         }
         return course;
     } catch (err) {

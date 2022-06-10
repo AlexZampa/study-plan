@@ -32,7 +32,7 @@
 
 .nav-border-left {
   margin-left: 2em;
-  border-left: 1px solid var(--navbar-color);
+  border-left: 1px solid var(--navbar-text-color);
 }
 
 .nav-link {

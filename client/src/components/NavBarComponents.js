@@ -1,13 +1,13 @@
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Book, PersonCircle } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 
 
-function NavBarApp(props) {
+function NavBar(props) {
     return (
         <Navbar expand="lg" bg="dark" variant="dark" fixed="top">
-            <Link to='/' style={{ textDecoration: 'none' }}>
+            <Link to='/home' style={{ textDecoration: 'none' }}>
                 <Navbar.Brand className='m-4'>
                     <Book color="white" size={25} />
                     <Navbar.Text className='nav-items'>Home</Navbar.Text>
@@ -40,25 +40,5 @@ function NavBarApp(props) {
 };
 
 
-function MyNav(props) {
-    return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
 
-            <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-            <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav className="me-auto">
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                </Nav>
-                <Nav className='nav-items'>
-                    <Nav.Link href="#deets">More deets</Nav.Link>
-                    <Nav.Link eventKey={2} href="#memes">
-                        Dank memes
-                    </Nav.Link>
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
-    );
-}
-
-
-export { NavBarApp, MyNav };
+export { NavBar };

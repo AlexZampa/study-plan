@@ -9,20 +9,20 @@ import { Trash3Fill } from 'react-bootstrap-icons'
 import { useEffect, useState } from 'react';
 import Course from '../utils/Course';
 
-function StudyPlanApp(props) {
+function StudyPlanPage(props) {
     const [newStudyPlan, setNewStudyPlan] = useState(false);
     const [valid, setValid] = useState(false);
 
-    // check if study plan is valid every time the study plan courses change
+    // check if study plan is valid (credits range) every time the study plan courses change
     useEffect(() => {
-        if(props.studyPlan){
+        if (props.studyPlan) {
             const totCredits = props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0);
             if (totCredits >= creditsRange[props.studyPlan.type].min && totCredits <= creditsRange[props.studyPlan.type].max)
                 setValid(true);
             else
                 setValid(false);
         }
-        else{
+        else {
             setValid(false);
         }
     }, [props.studyPlan.courses])
@@ -124,39 +124,42 @@ function StudyPlanApp(props) {
                 <FormNewStudyPlan setNewStudyPlan={setNewStudyPlan} setStudyPlan={props.setStudyPlan} />
             }
 
-            <Row>
-                <StudyPlanTable courses={props.courses} studyPlan={props.studyPlan.courses} type={props.studyPlan.type} handleRemoveCourse={handleRemoveCourse} />
-            </Row>
-
-            {
-                props.studyPlan ?
-                    <Row className={valid ? 'studyplan-text' : 'studyplan-text studyplan-text-error'} >
-                        <Col className='col-10' align='right'><p>tot credits:</p></Col>
-                        <Col className='col-2' align='center'><p>{props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0)}</p></Col>
-                    </Row>
-                    : <></>
+            {props.studyPlan || newStudyPlan ?
+                <Row>
+                    <StudyPlanTable courses={props.courses} studyPlan={props.studyPlan.courses} type={props.studyPlan.type} handleRemoveCourse={handleRemoveCourse} />
+                </Row>
+                :
+                <></>
             }
 
-            {
-                props.studyPlan ?
-                    <Row>
-                        <Col className='col-1' align='right'>
-                            <Button disabled={!valid} variant='dark' size='sm' onClick={handleSave}>Save</Button>
-                        </Col>
-                        <Col className='col-1' align='left'>
-                            <Button variant='dark' size='sm' onClick={handleCancel}>Cancel</Button>
-                        </Col>
-                        {
-                            newStudyPlan ?
-                                <></>
-                                :
-                                <Col className='col-10' align='right'>
-                                    <Button variant='danger' size='sm' onClick={handleDelete}>Delete study plan</Button>
-                                </Col>
-                        }
-                    </Row>
-                    :
-                    <></>
+            {props.studyPlan ?
+                <Row className={valid ? 'studyplan-text' : 'studyplan-text studyplan-text-error'} >
+                    <Col className='col-10' align='right'><p>tot credits:</p></Col>
+                    <Col className='col-2' align='center'><p>{props.studyPlan.courses.reduce((total, courseCode) => total + props.courses.find(c => c.code === courseCode).credits, 0)}</p></Col>
+                </Row>
+                :
+                <></>
+            }
+
+            {props.studyPlan ?
+                <Row>
+                    <Col className='col-1' align='right'>
+                        <Button disabled={!valid} variant='dark' size='sm' onClick={handleSave}>Save</Button>
+                    </Col>
+                    <Col className='col-1' align='left'>
+                        <Button variant='dark' size='sm' onClick={handleCancel}>Cancel</Button>
+                    </Col>
+                    {
+                        newStudyPlan ?
+                            <></>
+                            :
+                            <Col className='col-10' align='right'>
+                                <Button variant='danger' size='sm' onClick={handleDelete}>Delete study plan</Button>
+                            </Col>
+                    }
+                </Row>
+                :
+                <></>
             }
 
 
@@ -238,4 +241,4 @@ function FormNewStudyPlan(props) {
 
 }
 
-export default StudyPlanApp;
+export default StudyPlanPage;

@@ -28,18 +28,10 @@ function App() {
     checkAuth();
   }, []);
 
-
-  // use effect: get Study Plan
-  useEffect(() => {
-    if (loggedIn) {
-      getStudyPlan();
-    }
-  }, [loggedIn]);
-
   // use effect: get courses
   useEffect(() => {
     getCourses();
-  }, []);
+  }, [loggedIn]);
 
 
   // get study plan
@@ -108,7 +100,7 @@ function App() {
     }
   };
 
-
+// update a course (only local update)
   const updateCourse = (course) => {
     setCourses(oldCourses => {
       return oldCourses.map(c => {
@@ -134,7 +126,8 @@ function App() {
         <Routes>
           <Route path='/login' element={loggedIn ? <Navigate replace to='/studyplan' /> : <LoginLayout handleLogin={handleLogin} />} />
           <Route path="/" element={<DefaultLayout loggedIn={loggedIn} handleLogout={handleLogout} footerRef={footerRef} focusOnFooter={focusOnFooter} />}>
-            <Route index element={<HomeLayout courses={courses} getCourses={getCourses} />} />
+            <Route index element={<Navigate to='/home' replace/>}/>
+            <Route path='/home' element={<HomeLayout courses={courses} getCourses={getCourses} />} />
             <Route path='/studyplan' element={loggedIn ? <StudyPlanLayout courses={courses} updateCourse={updateCourse} studyPlan={studyPlan} setStudyPlan={setStudyPlan} loggedIn={loggedIn} getStudyPlan={getStudyPlan}
               modifyStudyPlan={modifyStudyPlan} createStudyPlan={createStudyPlan} deleteStudyPlan={deleteStudyPlan} /> : <Navigate replace to='/login' />} />
             <Route path='*' element={<NotFoundLayout />} />

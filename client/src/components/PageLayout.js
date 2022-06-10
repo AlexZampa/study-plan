@@ -3,15 +3,15 @@ import { Link, Outlet } from 'react-router-dom';
 import { CourseTable } from './CourseComponents';
 import { LoginForm } from './LoginComponents';
 import FooterBar from './FooterComponents';
-import { NavBarApp } from './NavBarComponents';
+import { NavBar } from './NavBarComponents';
 import { useEffect } from 'react';
-import StudyPlanApp from './StudyPlanComponents';
+import StudyPlanPage from './StudyPlanComponents';
 
 
 function DefaultLayout(props) {
   return (
     <>
-      <NavBarApp loggedIn={props.loggedIn} logout={props.handleLogout} focusOnFooter={props.focusOnFooter} />
+      <NavBar loggedIn={props.loggedIn} logout={props.handleLogout} focusOnFooter={props.focusOnFooter} />
       <Row>
         <Outlet />
       </Row>
@@ -42,7 +42,7 @@ function HomeLayout(props) {
 function LoginLayout(props) {
   return (
     <>
-      <NavBarApp loggedIn={props.loggedIn} hideMenu={true}/>
+      <NavBar loggedIn={props.loggedIn} hideMenu={true}/>
       <Container fluid className='App login-form mt-5 p-5'>
         <Row>
           <Col>
@@ -73,13 +73,18 @@ function NotFoundLayout() {
 
 
 function StudyPlanLayout(props) {
+
+  useEffect(() => {
+    props.getStudyPlan();
+  }, []);
+
   return (
     <Container className='mt-5'>
       <Row className='mt-5'>
         <h1 className='main-header'>Study Plan</h1>
       </Row>
       <Row className='m-5'>
-        <StudyPlanApp studyPlan={props.studyPlan} setStudyPlan={props.setStudyPlan} courses={props.courses} updateCourse={props.updateCourse} getStudyPlan={props.getStudyPlan}
+        <StudyPlanPage studyPlan={props.studyPlan} setStudyPlan={props.setStudyPlan} courses={props.courses} updateCourse={props.updateCourse} getStudyPlan={props.getStudyPlan}
           modifyStudyPlan={props.modifyStudyPlan} createStudyPlan={props.createStudyPlan} deleteStudyPlan={props.deleteStudyPlan} />
       </Row>
     </Container>
