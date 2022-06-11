@@ -11,9 +11,9 @@ const getAllCourses = async () => {
       return courses.map(c => new Course(c.code, c.name, c.credits, c.enrolledStudents, c.maxStudents, c.preparatoryCourse, c.incompatibleCourses.map(ic => ic.code)));
     }
     else
-      throw courses;
+      throw new Error('Internal Server Error');
   } catch (err) {
-    throw new Error(err.msg);
+    throw err;
   }
 };
 
@@ -32,7 +32,7 @@ const getStudyPlan = async () => {
       throw studyPlan;
     }
   } catch (err) {
-    throw new Error(err.msg);
+    throw new Error('Internal Server Error');
   }
 };
 

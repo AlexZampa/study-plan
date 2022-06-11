@@ -122,6 +122,27 @@
   color: var(--trash-icon-hover-color);
 }
 
+.not-found-container{
+  height: 85vh;
+}
+
+.not-found-container h1{
+  padding-top: 5px;
+  letter-spacing: .1rem;
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+
+.not-found-container p{
+  font-size: large;
+  margin-left: 4em;
+  letter-spacing: .5px;
+}
+
+
+
+
 :root {
   --main-color: #f87a7a;
   --navbar-text-color: lightgrey;
@@ -134,4 +155,5 @@
   --table-icon-hover-color: hsl(128, 44%, 34%);
   --footer-bg-color: black;
   --footer-text-color: lightgrey;
+  --link-color: lightblue;
 }

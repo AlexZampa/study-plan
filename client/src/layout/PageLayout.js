@@ -6,6 +6,7 @@ import FooterBar from '../components/FooterComponents';
 import { NavBar } from '../components/NavBarComponents';
 import { useEffect } from 'react';
 import StudyPlanPage from '../components/StudyPlanComponents';
+import { ExclamationCircle, CaretRightFill } from 'react-bootstrap-icons'
 
 
 function DefaultLayout(props) {
@@ -42,7 +43,7 @@ function HomeLayout(props) {
 function LoginLayout(props) {
   return (
     <>
-      <NavBar loggedIn={props.loggedIn} hideMenu={true}/>
+      <NavBar loggedIn={props.loggedIn} hideMenu={true} />
       <Container fluid className='App login-form mt-5 p-5'>
         <Row>
           <Col>
@@ -61,12 +62,25 @@ function LoginLayout(props) {
 
 function NotFoundLayout() {
   return (
-    <>
-      <h2>This is not the route you are looking for!</h2>
-      <Link to="/">
-        <Button variant="primary">Go Home!</Button>
-      </Link>
-    </>
+    <Container fluid className='App not-found-container mt-5 p-5'>
+      <Row className='mt-5 mb-5'>
+        <Col className='col-2' align='right'>
+          <ExclamationCircle size={50} />
+        </Col>
+        <Col align='left'>
+          <h1>The page you are looking for does not exist</h1>
+        </Col>
+      </Row>
+      <Row className='col-8'>
+        <Col className='col-6' align='center'>
+          <Link to="/home" style={{"text-decoration": "none"}}>
+            <p>Go to Home Page 
+            <CaretRightFill/>
+            </p>
+          </Link>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

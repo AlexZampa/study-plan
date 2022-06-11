@@ -2,7 +2,7 @@ import { Container, Table } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
-import { PlusSquareFill, CheckLg } from 'react-bootstrap-icons'
+import { PlusSquareFill, CheckLg } from 'react-bootstrap-icons';
 
 function CourseTable(props) {
     return (

@@ -4,7 +4,7 @@
 ## **React Client Application Routes**
 
 - Route `/home`: main page (not protected) that contains a table with all courses that the university offers.
-- Route `/studyplan`: shows the study plan of an (authenticated and authorized) user and allows them to modify it, if the user does not have a study plan a new one can be created.
+- Route `/studyplan`: shows the study plan of  (authenticated and authorized) users and allows them to modify it, if the user does not have a study plan a new one can be created.
 - Route `/login` shows the form to fill in to authenticate (create a session).
 
 
@@ -118,17 +118,16 @@
 ## **Main React Components**
 
 - `DefaultLayout` (in `./layout/PageLayout.js`): Default layout always displayed for all Route except for '/login'.
-- `HomeLayout` (in `./layout/PageLayout.js`): Layout of the Route '/home', fetches courses from the server.
-- `CourseTable` (in `./components/CourseComponents.js`): displays the Course table, given the list of courses. When a StudyPlan is also present it displays the buttons for adding a course to a study plan.
-- `CourseRow` (in `./components/CourseComponents.js`): displays the Course row, contains the logic of the expanded/contracted row.
+- `HomeLayout` (in `./layout/PageLayout.js`): Layout of the Route '/home', fetches list of courses from the server.
+- `CourseTable` (in `./components/CourseComponents.js`): displays the course table, given the list of courses. When a StudyPlan is also present it displays the buttons for adding a course to a study plan.
+- `CourseRow` (in `./components/CourseComponents.js`): displays the course row, contains the logic of the expanded/contracted row.
 - `CourseInfo` (in `./components/CourseComponents.js`): displays the info about the preparatory course and the incompatible courses when a row is expanded.
 - `LoginLayout` (in `./layout/PageLayout.js`): Layout of the Route '/login'. When unauthorized users try to enter in the Route '/studyplan', they are automatically redirected to the login route.
 - `LoginForm` (in `./components/LoginComponents.js`): displays the form and handle the login.
 - `StudyPlanLayout` (in `./layout/PageLayout.js`): Layout of the Route '/studyplan', protected from unathorized users. fetches the study plan from the server.
-- `StudyPlanPage` (in `./components/StudyPlanComponents.js`): displays the study plan of the user and allow him / her to create / edit / delete it.
+- `StudyPlanPage` (in `./components/StudyPlanComponents.js`): displays the study plan of the user and allow them to create / edit / delete it.
 - `FormNewStudyPlan` (in `./components/StudyPlanComponents.js`): displays a form when an user wants to create a new study plan.
-- `NavBar` (in `/components/NavBarComponents.js`): displays the navbar that contains the links to all the route of the application. When an user is logged in, allow him/her to logout. 
-
+- `NavBar` (in `/components/NavBarComponents.js`): displays the navbar that contains the links to all the route of the application. When an user is logged in, allows them to logout.
 
 
 

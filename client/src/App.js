@@ -39,14 +39,20 @@ function App() {
     try {
       const result = await API.getStudyPlan();
       setStudyPlan(result);
-    } catch (err) { }
+    } catch (err) {
+      toast.error(err.message, {toastId: err.message});
+    }
   }
 
 
   // get list of courses
   const getCourses = async () => {
-    const courseList = await API.getAllCourses();
-    setCourses(courseList);
+    try {
+      const courseList = await API.getAllCourses();
+      setCourses(courseList);
+    } catch (err) {
+      toast.error(err.message, {toastId: err.message});
+    }
   }
 
   // login
@@ -73,9 +79,11 @@ function App() {
       await API.updateStudyPlan(studyPlan);
       getCourses();
       getStudyPlan();
+      return true;
     } catch (err) {
-      toast.error('error');
+      toast.error(err.message, {toastId: err.message});
     }
+    return false;
   };
 
   // create study plan
@@ -84,23 +92,25 @@ function App() {
       await API.createStudyPlan(studyPlan);
       getCourses();
       getStudyPlan();
+      return true;
     } catch (err) {
-      toast.error('error');
+      toast.error(err.message, {toastId: err.message});
     }
+    return false;
   };
 
-  // create study plan
+  // delete study plan
   const deleteStudyPlan = async () => {
     try {
       await API.deleteStudyPlan();
       getCourses();
       getStudyPlan();
     } catch (err) {
-      toast.error('error');
+      toast.error(err.message, {toastId: err.message});
     }
   };
 
-// update a course (only local update)
+  // update a course (only local update of the state)
   const updateCourse = (course) => {
     setCourses(oldCourses => {
       return oldCourses.map(c => {
@@ -126,7 +136,7 @@ function App() {
         <Routes>
           <Route path='/login' element={loggedIn ? <Navigate replace to='/studyplan' /> : <LoginLayout handleLogin={handleLogin} />} />
           <Route path="/" element={<DefaultLayout loggedIn={loggedIn} handleLogout={handleLogout} footerRef={footerRef} focusOnFooter={focusOnFooter} />}>
-            <Route index element={<Navigate to='/home' replace/>}/>
+            <Route index element={<Navigate to='/home' replace />} />
             <Route path='/home' element={<HomeLayout courses={courses} getCourses={getCourses} />} />
             <Route path='/studyplan' element={loggedIn ? <StudyPlanLayout courses={courses} updateCourse={updateCourse} studyPlan={studyPlan} setStudyPlan={setStudyPlan} loggedIn={loggedIn} getStudyPlan={getStudyPlan}
               modifyStudyPlan={modifyStudyPlan} createStudyPlan={createStudyPlan} deleteStudyPlan={deleteStudyPlan} /> : <Navigate replace to='/login' />} />

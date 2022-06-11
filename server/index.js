@@ -74,7 +74,7 @@ app.get('/api/courses', async (req, res) => {
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
-    return res.status(500).end();
+    return res.status(500).json({msg: 'Internal Server Error'});
   }
 });
 
@@ -89,7 +89,7 @@ app.get('/api/studyplan', isLoggedIn,
       console.log(err);
       switch (err.err) {
         case 404: return res.status(404).json(err);
-        default: return res.status(500).end();
+        default: return res.status(500).json({msg: 'Internal Server Error'});
       }
     }
   });
@@ -104,12 +104,12 @@ app.post('/api/studyplan',
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         console.log({ errors: errors.array() });
-        return res.status(422).end();
+        return res.status(422).json({msg: 'Incorrect Data'});
       }
       const courses = [];
       for (const c of req.body.courses) {
         if (c.code === undefined)
-          return res.status(422).end();
+          return res.status(422).json({msg: 'Incorrect Data'});
         courses.push(c.code);
       }
       const studyPlan = new StudyPlan(req.body.type, courses);
@@ -118,12 +118,12 @@ app.post('/api/studyplan',
         const result = await studyPlanDAO.createStudyPlan(studyPlan, req.user.id);
         return res.status(201).end();
       }
-      return res.status(422).end();
+      return res.status(422).json({msg: 'Incorrect Data'});
     } catch (err) {
       console.log(err);
       switch (err.err) {
-        case 422: return res.status(422).end();
-        default: return res.status(503).end();
+        case 422: return res.status(422).json({msg: 'Incorrect Data'});
+        default: return res.status(503).json({msg: 'Service Unavailable'});
       }
     }
   });
@@ -140,12 +140,12 @@ app.put('/api/studyplan',
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         console.log({ errors: errors.array() });
-        return res.status(422).end();
+        return res.status(422).json({msg: 'Incorrect Data'});
       }
       const courses = [];
       for (const c of req.body.courses) {
         if (c.code === undefined)
-          return res.status(422).end();
+          return res.status(422).json({msg: 'Incorrect Data'});
         courses.push(c.code);
       }
       const studyPlan = new StudyPlan(req.body.type, courses);
@@ -156,13 +156,13 @@ app.put('/api/studyplan',
         const result = await studyPlanDAO.createStudyPlan(studyPlan, req.user.id);
         return res.status(200).end();
       }
-      return res.status(422).end();
+      return res.status(422).json({msg: 'Incorrect Data'});
     } catch (err) {
       console.log(err);
       switch (err.err) {
-        case 404: return res.status(404).end();
-        case 422: return res.status(422).end();
-        default: return res.status(503).end();
+        case 404: return res.status(404).json({msg: 'Study Plan Not Found'});
+        case 422: return res.status(422).json({msg: 'Incorrect Data'});
+        default: return res.status(503).json({msg: 'Service Unavailable'});
       }
     }
   });
@@ -175,7 +175,7 @@ app.delete('/api/studyplan', isLoggedIn,
       const result = await studyPlanDAO.deleteStudyPlan(req.user.id);
       return res.status(204).end();
     } catch (err) {
-      return res.status(503).end();
+      return res.status(503).json({msg: 'Service Unavailable'});
     }
   });
 

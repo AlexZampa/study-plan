@@ -28,10 +28,11 @@ function StudyPlanPage(props) {
     }, [props.studyPlan.courses])
 
     // commit changes
-    const handleSave = () => {
+    const handleSave = async () => {
         if (newStudyPlan) {
-            props.createStudyPlan(props.studyPlan);
-            setNewStudyPlan(false);
+            const success = await props.createStudyPlan(props.studyPlan);
+            if(success)
+                setNewStudyPlan(false);
         }
         else {
             props.modifyStudyPlan(props.studyPlan);
@@ -225,11 +226,11 @@ function FormNewStudyPlan(props) {
     return (
         <Form onSubmit={handleFormSubmit}>
             <Form.Group className='studyplan-text mb-5' as={Row} controlId="formStudyPlanType">
-                <Form.Label column sm={2}>new study plan</Form.Label>
+                <Form.Label column sm={2} className='pt-1'>new study plan</Form.Label>
                 <Col className='col-3'>
                     <Form.Select defaultValue="full-time" onChange={event => setType(event.target.value)}>
-                        <option>full-time</option>
-                        <option>part-time</option>
+                        <option value='full-time'>full-time ({creditsRange['full-time'].min} - {creditsRange['full-time'].max} credits)</option>
+                        <option value='part-time'>part-time ({creditsRange['part-time'].min} - {creditsRange['part-time'].max} credits)</option>
                     </Form.Select>
                 </Col>
                 <Col className='col-2' align='right'>
