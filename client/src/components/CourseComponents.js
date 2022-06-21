@@ -82,16 +82,12 @@ function CourseInfo(props) {
             <tr className='table-row-info' align='center'>
                 {props.addColumn ? <td></td> : <></>}
                 <td className='table-header-info' colSpan={1}>preparatory course </td>
-                {props.course.preparatoryCourse ?
-                    <>
-                        <td align='center' colSpan={1}>
-                            {props.course.preparatoryCourse}</td>
-                        <td align='left' colSpan={3}>
-                            {props.courses.find(c => c.code === props.course.preparatoryCourse).name}</td>
-                    </>
-                    :
-                    <></>
-                }
+                
+                <td align='center' colSpan={1}>
+                    {props.course.preparatoryCourse ? props.course.preparatoryCourse : "-"}</td>
+                <td align='left' colSpan={3}>
+                    {props.course.preparatoryCourse ? props.courses.find(c => c.code === props.course.preparatoryCourse).name : ""}</td>
+    
             </tr>
 
             <tr className='table-row-info' align='center'>
@@ -100,7 +96,7 @@ function CourseInfo(props) {
                 {props.course.incompatibleCourses[0] ?
                     <IncompatibleCourseData first={true} course={props.courses.find((c) => c.code === props.course.incompatibleCourses[0])} />
                     :
-                    <></>
+                    <td>-</td>
                 }
             </tr>
 

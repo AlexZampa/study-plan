@@ -14,10 +14,10 @@ function LoginForm(props) {
     return (
         <Form className='mt-5' onSubmit={handleSubmit}>
             <FloatingLabel controlId="username" label="Email address" className="login-form">
-                <Form.Control type="email" placeholder="name@example.com" value={username} onChange={ev => setUsername(ev.target.value)} required={true} />
+                <Form.Control type="email" placeholder="name@example.com" value={username} onChange={ev => setUsername(ev.target.value)} required />
             </FloatingLabel>
             <FloatingLabel controlId="password" label="Password" className="login-form">
-                <Form.Control type="password" placeholder="Password" value={password} onChange={ev => setPassword(ev.target.value)} required={true} minLength={6} maxLength={40}/>
+                <Form.Control type="password" placeholder="Password" value={password} onChange={ev => setPassword(ev.target.value)} required maxLength={40}/>
             </FloatingLabel>
             <Button type="submit" size='md'>Login</Button>
         </Form>

@@ -56,15 +56,15 @@ function StudyPlanPage(props) {
     const checkAddCourse = (course) => {
         // check preparatory course
         if (course.preparatoryCourse && !props.studyPlan.courses.find(c => c === course.preparatoryCourse))
-            return { isValid: false, errMsg: <div>Missing preparatory course:<br />{props.courses.find(c => c.code === course.preparatoryCourse).name}</div> };
+            return { isValid: false, errMsg: <div>Missing preparatory course:<br />{props.courses.find(c => c.code === course.preparatoryCourse).name}</div>, errId: `err-${course.code}-prep-course`};
         // check number of enrolled students
         if (course.enrolledStudents === course.maxStudents)
-            return { isValid: false, errMsg: "Course has reached maximum number of enrolled students" };
+            return { isValid: false, errMsg: "Course has reached maximum number of enrolled students", errId: `err-${course.code}-max-students` };
         // check incompatible courses
         for (const ic of course.incompatibleCourses) {
             const incompatibleCourse = props.studyPlan.courses.find(sc => sc === ic);
             if (incompatibleCourse)
-                return { isValid: false, errMsg: <div>Incompatible course:<br />{props.courses.find(c => c.code === incompatibleCourse).name}</div> };
+                return { isValid: false, errMsg: <div>Incompatible course:<br />{props.courses.find(c => c.code === incompatibleCourse).name}</div>, errId: `err-${course.code}-incompatible-course` };
         }
 
         return { isValid: true };
@@ -80,7 +80,7 @@ function StudyPlanPage(props) {
         // check preparatory course
         for (const spc of studyPlanCourses) {
             if (spc.preparatoryCourse === course.code)
-                return { isValid: false, errMsg: <div>The course is a preparatory course of:<br />{spc.name}</div> };
+                return { isValid: false, errMsg: <div>The course is a preparatory course of:<br />{spc.name}</div>, errId: `err-rm-${course.code}-prep-course` };
         }
 
         return { isValid: true };
@@ -97,7 +97,7 @@ function StudyPlanPage(props) {
             props.updateCourse(new Course(course.code, course.name, course.credits, course.enrolledStudents + 1, course.maxStudents, course.preparatoryCourse, course.incompatibleCourses));
         }
         else
-            toast.error(check.errMsg, { toastId: check.errMsg, autoClose: 4000, pauseOnHover: true, hideProgressBar: false });
+            toast.error(check.errMsg, { toastId: check.errId, autoClose: 4000, pauseOnHover: true, hideProgressBar: false });
     };
 
     /*** function to remove course from studyPlan ***/
@@ -110,7 +110,7 @@ function StudyPlanPage(props) {
             props.updateCourse(new Course(course.code, course.name, course.credits, course.enrolledStudents - 1, course.maxStudents, course.preparatoryCourse, course.incompatibleCourses));
         }
         else
-            toast.error(check.errMsg, { toastId: check.errMsg, autoClose: 4000, pauseOnHover: true, hideProgressBar: false });
+            toast.error(check.errMsg, { toastId: check.errId, autoClose: 4000, pauseOnHover: true, hideProgressBar: false });
     }
 
 

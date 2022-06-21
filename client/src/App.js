@@ -40,7 +40,7 @@ function App() {
       const result = await API.getStudyPlan();
       setStudyPlan(result);
     } catch (err) {
-      toast.error(err.message, {toastId: err.message});
+      toast.error(err.message, {toastId: "err-get-studyplan"});
     }
   }
 
@@ -51,7 +51,7 @@ function App() {
       const courseList = await API.getAllCourses();
       setCourses(courseList);
     } catch (err) {
-      toast.error(err.message, {toastId: err.message});
+      toast.error(err.message, {toastId: "err-get-courses"});
     }
   }
 
@@ -60,9 +60,9 @@ function App() {
     try {
       const user = await API.logIn(credentials);
       setLoggedIn(true);
-      toast.success(`Welcome, ${user.name} ${user.surname}!`, { position: "top-center" });
+      toast.success(`Welcome ${user.name} ${user.surname}`, { position: "top-center", toastId: "login" });
     } catch (err) {
-      toast.error(err, { position: "top-center" });
+      toast.error(err, { position: "top-center", toastId: "err-login" });
     }
   };
 
@@ -70,7 +70,7 @@ function App() {
   const handleLogout = async () => {
     await API.logOut();
     setLoggedIn(false);
-    toast.success('Succeffully logged out!', { position: "top-center" });
+    toast.success('Succeffully logged out', { position: "top-center", toastId: "logout" });
   };
 
   // update study plan
@@ -79,9 +79,10 @@ function App() {
       await API.updateStudyPlan(studyPlan);
       getCourses();
       getStudyPlan();
+      toast.success("Study plan modified", {toastId: "update-studyplan"});
       return true;
     } catch (err) {
-      toast.error(err.message, {toastId: err.message});
+      toast.error(err.message, {toastId: "err-update-studyplan"});
     }
     return false;
   };
@@ -92,9 +93,10 @@ function App() {
       await API.createStudyPlan(studyPlan);
       getCourses();
       getStudyPlan();
+      toast.success("Study plan created", {toastId: "create-studyplan"});
       return true;
     } catch (err) {
-      toast.error(err.message, {toastId: err.message});
+      toast.error(err.message, {toastId: "err-create-studyplan"});
     }
     return false;
   };
@@ -105,8 +107,9 @@ function App() {
       await API.deleteStudyPlan();
       getCourses();
       getStudyPlan();
+      toast.success("Study plan deleted", {toastId: "delete-studyplan"});
     } catch (err) {
-      toast.error(err.message, {toastId: err.message});
+      toast.error(err.message, {toastId:"err-delete-studyplan"});
     }
   };
 
