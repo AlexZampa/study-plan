@@ -181,7 +181,7 @@ app.delete('/api/studyplan', isLoggedIn,
 
 
 
-
+// check if studyplan is valid
 async function checkStudyPlan(studyPlan, oldStudyPlan) {
   try {
     const courses = [];
@@ -253,7 +253,7 @@ app.post('/api/sessions', function (req, res, next) {
     if (err)
       return next(err);
     if (!user) {
-      // display wrong login messages
+      // display err login message
       return res.status(401).send(info);
     }
     // success, perform the login

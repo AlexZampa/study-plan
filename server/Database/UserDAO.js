@@ -27,15 +27,3 @@ exports.getUser = (email, password) => {
     })
 };
 
-exports.getUserById = async (id) => {
-    try {
-        const sql = 'SELECT * FROM Users WHERE id = ?';
-        const row = await db.DBget(sql, [id]);
-        if (row === undefined)
-            resolve({ err: 404, msg: 'User not found!' });
-        const user = new User(row.id, row.name, row.surname, row.email);
-        return (user);
-    } catch (err) {
-        throw err;
-    }
-};
