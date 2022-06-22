@@ -8,7 +8,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const session = require('express-session');
 
-const { User, StudyPlan, Course } = require('./utils');
+const { User, StudyPlan, Course } = require('./Utils');
 const userDAO = require('./Database/UserDAO');
 const courseDAO = require('./Database/CourseDAO');
 const studyPlanDAO = require('./Database/StudyPlanDAO');
