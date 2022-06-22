@@ -19,7 +19,7 @@ function NavBar(props) {
                         <Link to='/studyplan' className='nav-link'>
                             <Navbar.Text className='nav-items'>MyStudyPlan</Navbar.Text>
                         </Link>
-                        <Nav.Link className='nav-items' onClick={props.focusOnFooter}>Contact me</Nav.Link>
+                        <Nav.Link className='nav-items' onClick={props.focusOnFooter}>Contact</Nav.Link>
                     </>
                 }
             </Nav>

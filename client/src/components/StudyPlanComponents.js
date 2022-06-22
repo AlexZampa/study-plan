@@ -10,7 +10,9 @@ import { useEffect, useState } from 'react';
 import Course from '../utils/Course';
 
 function StudyPlanPage(props) {
+    // used to hide button delete study plan when user does not have a study plan and to change API call when saving
     const [newStudyPlan, setNewStudyPlan] = useState(false);
+    // used to disable button save when credits not in range
     const [valid, setValid] = useState(false);
 
     // check if study plan is valid (credits range) every time the study plan courses change
@@ -66,7 +68,6 @@ function StudyPlanPage(props) {
             if (incompatibleCourse)
                 return { isValid: false, errMsg: <div>Incompatible course:<br />{props.courses.find(c => c.code === incompatibleCourse).name}</div>, errId: `err-${course.code}-incompatible-course` };
         }
-
         return { isValid: true };
     }
 
@@ -76,13 +77,11 @@ function StudyPlanPage(props) {
         props.studyPlan.courses.forEach(c => {
             studyPlanCourses.push(props.courses.find(course => c === course.code));
         });
-
         // check preparatory course
         for (const spc of studyPlanCourses) {
             if (spc.preparatoryCourse === course.code)
                 return { isValid: false, errMsg: <div>The course is a preparatory course of:<br />{spc.name}</div>, errId: `err-rm-${course.code}-prep-course` };
         }
-
         return { isValid: true };
     }
 
@@ -94,6 +93,7 @@ function StudyPlanPage(props) {
             props.setStudyPlan((oldStudyPlan) => {
                 return new StudyPlan(oldStudyPlan.type, [...oldStudyPlan.courses, course.code]);
             });
+            // add 1 enrolled student to course (locally)
             props.updateCourse(new Course(course.code, course.name, course.credits, course.enrolledStudents + 1, course.maxStudents, course.preparatoryCourse, course.incompatibleCourses));
         }
         else
@@ -107,6 +107,7 @@ function StudyPlanPage(props) {
             props.setStudyPlan((oldStudyPlan) => {
                 return new StudyPlan(oldStudyPlan.type, oldStudyPlan.courses.filter(c => c !== course.code));
             });
+            // remove 1 enrolled student to course (locally)
             props.updateCourse(new Course(course.code, course.name, course.credits, course.enrolledStudents - 1, course.maxStudents, course.preparatoryCourse, course.incompatibleCourses));
         }
         else
@@ -116,7 +117,7 @@ function StudyPlanPage(props) {
 
     return (
         <Container fluid>
-            {props.studyPlan || newStudyPlan ?
+            {props.studyPlan ?
                 <Row className='studyplan-text mb-4'>
                     <Col align='left' xs={2}>{props.studyPlan.type}</Col>
                     <Col align='left'> {creditsRange[props.studyPlan.type].min} - {creditsRange[props.studyPlan.type].max} credits</Col>
@@ -125,7 +126,7 @@ function StudyPlanPage(props) {
                 <FormNewStudyPlan setNewStudyPlan={setNewStudyPlan} setStudyPlan={props.setStudyPlan} />
             }
 
-            {props.studyPlan || newStudyPlan ?
+            {props.studyPlan ?
                 <Row>
                     <StudyPlanTable courses={props.courses} studyPlan={props.studyPlan.courses} type={props.studyPlan.type} handleRemoveCourse={handleRemoveCourse} />
                 </Row>
@@ -226,15 +227,14 @@ function FormNewStudyPlan(props) {
     return (
         <Form onSubmit={handleFormSubmit}>
             <Form.Group className='studyplan-text mb-5' as={Row} controlId="formStudyPlanType">
-                <Form.Label column sm={2} className='pt-1'>new study plan</Form.Label>
                 <Col className='col-3'>
                     <Form.Select defaultValue="full-time" onChange={event => setType(event.target.value)}>
                         <option value='full-time'>full-time ({creditsRange['full-time'].min} - {creditsRange['full-time'].max} credits)</option>
                         <option value='part-time'>part-time ({creditsRange['part-time'].min} - {creditsRange['part-time'].max} credits)</option>
                     </Form.Select>
                 </Col>
-                <Col className='col-2' align='right'>
-                    <Button variant='dark' size='sm' type="submit">Create</Button>
+                <Col className='col-3' align='right'>
+                    <Button variant='dark' size='sm' type="submit">new study plan</Button>
                 </Col>
             </Form.Group>
         </Form>

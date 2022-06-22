@@ -70,7 +70,7 @@ function App() {
   const handleLogout = async () => {
     await API.logOut();
     setLoggedIn(false);
-    toast.success('Succeffully logged out', { position: "top-center", toastId: "logout" });
+    toast.success('successfully logged out', { position: "top-center", toastId: "logout" });
   };
 
   // update study plan
