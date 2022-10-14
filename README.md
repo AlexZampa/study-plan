@@ -1,5 +1,7 @@
-# Exam #1: "Study Plan"
-## Student: s301132 ZAMPARUTTI ALESSANDRO 
+# "Study Plan Web Application"
+
+A web application to manage the study plan of a university student.
+Exam of the course Web Application I of Politecnico of Turin
 
 ## **React Client Application Routes**
 
